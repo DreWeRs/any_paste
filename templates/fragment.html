@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Viewing a fragment</h1>
+    <div class="mb-3">
+        <label class="form-label">File name</label>
+        <input type="text" class="form-control" value="{{ fragment.filename }}" readonly>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Content</label>
+        <textarea class="form-control" rows="20" style="width: 100%; min-height: 500px;" readonly>{{ fragment.content }}</textarea>
+    </div>
+    <a class="btn btn-secondary" href="/">To main page</a>
+{% endblock %}

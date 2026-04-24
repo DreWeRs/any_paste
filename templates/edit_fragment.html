@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Edit fragment</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.filename.label(class="form-label") }}
+            {{ form.filename(class="form-control", placeholder="Enter filename") }}
+            {% for error in form.filename.errors %}
+                <div class="alert alert-danger mt-2" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.content.label(class="form-label") }}
+            {{ form.content(class="form-control", rows="20", style="width: 100%; min-height: 500px;") }}
+            {% for error in form.content.errors %}
+                <div class="alert alert-danger mt-2" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.submit(class="btn btn-primary", value="Submit") }}
+        </div>
+
+        {% if message %}
+            <div class="alert alert-info" role="alert">
+                {{ message }}
+            </div>
+        {% endif %}
+    </form>
+    <a class="btn btn-secondary" href="/">To main page</a>
+{% endblock %}

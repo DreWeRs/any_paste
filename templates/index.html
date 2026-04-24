@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<meta charset="UTF-8">
+<h2 align="center">Your fragments</h2>
+
+{% if current_user and current_user.is_authenticated %}
+<a class="btn btn-secondary" href="/add_fragment">Add fragment</a>
+{% endif %}
+
+{% if not fragments %}
+<h3>You haven't created any fragments yet.</h3>
+{% endif %}
+
+{% for fragment in fragments %}
+<h3> fragment # {{ fragment.id }}</h3>
+<div class="table_container">
+    <table class="my_table">
+    <tr class="my_row">
+        <td class="title" width="400px" bgcolor="#dddddd">Fragment name</td>
+        <td class="title" width="200px" bgcolor="#dddddd">Content</td>
+        <td class="title" width="200px" bgcolor="#dddddd">Created at</td>
+    </tr>
+    <tr class="my_row">
+        <td class="ordinary" width="400px" bgcolor="#eeeeff">{{ fragment.filename }}</td>
+        <td class="ordinary" width="200px" bgcolor="#eeeeff">{{ fragment.content[:25] }}</td>
+        <td class="ordinary" width="200px" bgcolor="#eeeeff">{{ fragment.created_at}}</td>
+    </tr>
+    </table>
+</div>
+<a class="btn btn-success" href="/fragments/{{ fragment.id }}">View fragment</a>
+<a class="btn btn-warning" href="/edit_fragment/{{ fragment.id }}">Edit fragment</a>
+<a class="btn btn-danger" href="/delete_fragment/{{ fragment.id }}">Delete fragment</a>
+{% endfor %}
+{% endblock %}
