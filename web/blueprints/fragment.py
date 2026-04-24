@@ -22,10 +22,11 @@ def add_fragment():
             filename=form.filename.data,
             content=form.content.data
         )
+        fragment_id = fragment.id
         session.add(fragment)
         session.commit()
         session.close()
-        return redirect(f'/fragments/{fragment.id}')
+        return redirect(f'/fragments/{fragment_id}')
     return render_template('add_fragment.html', form=form)
 
 
