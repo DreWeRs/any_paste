@@ -5,6 +5,7 @@ from flask_login import current_user, login_required
 
 from db.models.fragments import Fragment
 from db.session_factory import create_session
+from web.data.add_fragment_file_form import AddFragmentFileForm
 from web.data.add_fragment_form import AddFragmentForm
 
 fragment_bp = Blueprint('fragment', __name__)
@@ -72,3 +73,24 @@ def delete_fragment(fragment_id):
         return redirect('/')
     session.close()
     return make_response({'error': 'No fragments found'}, 404)
+
+
+@fragment_bp.route('/add_from_file', methods=['POST', 'GET'])
+@login_required
+def add_from_file():
+    session = create_session()
+    form = AddFragmentFileForm()
+    if form.validate_on_submit():
+        fragment = Fragment(
+            id=str(uuid.uuid4()),
+            user_id=current_user.id,
+            filename=form.filename.data,
+            content=form.file.data.read().decode('utf-8')
+        )
+
+        fragment_id = fragment.id
+        session.add(fragment)
+        session.commit()
+        session.close()
+        return redirect(f'/fragments/{fragment_id}')
+    return render_template('add_from_file.html', form=form)

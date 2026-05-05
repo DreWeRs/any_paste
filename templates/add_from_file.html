@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Add fragment from file</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.filename.label(class="form-label") }}
+            {{ form.filename(class="form-control", placeholder="Enter filename") }}
+            {% for error in form.filename.errors %}
+                <div class="alert alert-danger mt-2" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.file.label(class="form-label") }}
+            {{ form.file(class="form-control") }}
+            {% for error in form.file.errors %}
+                <div class="alert alert-danger mt-2" role="alert">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="mb-3">
+            {{ form.submit(class="btn btn-primary", value="Submit") }}
+        </div>
+
+        {% if message %}
+            <div class="alert alert-info" role="alert">
+                {{ message }}
+            </div>
+        {% endif %}
+    </form>
+    <a class="btn btn-secondary" href="/">To main page</a>
+{% endblock %}
