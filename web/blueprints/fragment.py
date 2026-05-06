@@ -1,10 +1,12 @@
+import io
 import uuid
 
-from flask import Blueprint, redirect, render_template, make_response, request
+from flask import Blueprint, redirect, render_template, make_response, request, send_file
 from flask_login import current_user, login_required
 
 from db.models.fragments import Fragment
 from db.session_factory import create_session
+from web.data.add_fragment_file_form import AddFragmentFileForm
 from web.data.add_fragment_form import AddFragmentForm
 
 fragment_bp = Blueprint('fragment', __name__)
@@ -72,3 +74,45 @@ def delete_fragment(fragment_id):
         return redirect('/')
     session.close()
     return make_response({'error': 'No fragments found'}, 404)
+
+
+@fragment_bp.route('/add_from_file', methods=['POST', 'GET'])
+@login_required
+def add_from_file():
+    form = AddFragmentFileForm()
+    if form.validate_on_submit():
+        session = create_session()
+        fragment = Fragment(
+            id=str(uuid.uuid4()),
+            user_id=current_user.id,
+            filename=form.filename.data,
+            content=form.file.data.read().decode('utf-8')
+        )
+
+        fragment_id = fragment.id
+        session.add(fragment)
+        session.commit()
+        session.close()
+        return redirect(f'/fragments/{fragment_id}')
+    return render_template('add_from_file.html', form=form)
+
+
+@fragment_bp.route('/fragments/download/<fragment_id>')
+@login_required
+def download_fragment(fragment_id):
+    session = create_session()
+    fragment = session.get(Fragment, fragment_id)
+    if not fragment:
+        session.close()
+        return make_response({'error': 'No fragments found'}, 404)
+
+    file_content = fragment.content.encode('utf-8')
+    file_obj = io.BytesIO(file_content)
+
+    session.close()
+    return send_file(
+        file_obj,
+        mimetype='text/plain',
+        as_attachment=True,
+        download_name=fragment.filename + ".txt"
+    )

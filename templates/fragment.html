@@ -12,4 +12,13 @@
         <textarea class="form-control" rows="20" style="width: 100%; min-height: 500px;" readonly>{{ fragment.content }}</textarea>
     </div>
     <a class="btn btn-secondary" href="/">To main page</a>
+    <a class="btn btn-primary" href="/fragments/download/{{ fragment.id }}">Download as .txt</a>
+    <a class="btn btn-success" onclick="copyText()">Copy to clipboard</a>
+    <script>
+        function copyText() {
+
+            navigator.clipboard.writeText
+                ("{{ "http://127.0.0.1:5000/fragments/" + fragment.id }}");
+        }
+    </script>
 {% endblock %}
