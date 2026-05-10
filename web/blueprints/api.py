@@ -27,6 +27,7 @@ class FragmentListAPI(Resource):
         )
         session.add(fragment)
         session.commit()
+        fragment_id = fragment.id
         session.close()
         return {'id': fragment.id}, 201
 
