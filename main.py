@@ -6,6 +6,8 @@ from db.session_factory import init_db, create_session
 from web.blueprints.fragment import fragment_bp
 from web.blueprints.index import index_bp
 from web.blueprints.user import user_bp
+from web.blueprints.api import api_bp
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'nd21pr'
@@ -13,7 +15,7 @@ app.config['WTF_CSRF_SECRET_KEY'] = "secret key for forms"
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-
+app.register_blueprint(api_bp)
 
 @login_manager.user_loader
 def load_user(user_id):

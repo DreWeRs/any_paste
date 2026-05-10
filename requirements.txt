@@ -3,3 +3,4 @@ sqlalchemy==2.0.49
 werkzeug==3.1.8
 flask-login==0.6.3
 flask-wtf==1.2.2
+flask-restful==0.3.10
